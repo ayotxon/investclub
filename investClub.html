@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club d'Investissement — Stratégie</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141220;--ink2:#3d3a4f;--ink3:#7a7590;
+  --bg:#faf9f6;--bg2:#f3f0e8;--bg3:#ece8dd;
+  --gold:#b8860b;--goldb:#d4a017;--goldp:#fdf6e3;
+  --teal:#1a6b5a;--teal2:#2d9b82;--tealp:#e6f5f1;
+  --red:#b91c1c;--redp:#fef2f2;
+  --amb:#c45c0a;--ambp:#fff7ed;
+  --line:rgba(20,18,32,.1);
+  --sh:0 2px 16px rgba(20,18,32,.08);
+  --shm:0 6px 32px rgba(20,18,32,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65;overflow-x:hidden}
+
+/* ── HEADER ── */
+.hdr{background:var(--ink);padding:13px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.hdr-brand{font-family:'Fraunces',serif;color:#fff;font-size:17px;font-weight:600;display:flex;align-items:center;gap:10px}
+.hdr-brand::before{content:'◆';color:var(--goldb);font-size:11px}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,.4);font-weight:300;font-family:'Plus Jakarta Sans',sans-serif}
+.hdr-tag{font-size:10px;background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.4);color:var(--goldb);padding:4px 12px;border-radius:20px;letter-spacing:.08em}
+
+/* ── NAV ── */
+.snav{background:#fff;border-bottom:1px solid var(--line);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 16px;position:sticky;top:50px;z-index:200}
+.snav::-webkit-scrollbar{display:none}
+.st{display:flex;align-items:center;gap:7px;padding:12px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;flex-shrink:0;opacity:.45;user-select:none}
+.st:not(.lock):hover{background:var(--bg);opacity:.9}
+.st.cur{border-bottom-color:var(--goldb);opacity:1}
+.st.ok{border-bottom-color:var(--teal2);opacity:1}
+.st.lock{cursor:default;pointer-events:none}
+.stn{width:20px;height:20px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--ink3);flex-shrink:0;transition:all .2s}
+.st.cur .stn{background:var(--goldb);color:#fff}
+.st.ok .stn{background:var(--teal2);color:#fff}
+.stl{font-size:12px;font-weight:600;color:var(--ink3)}
+.st.cur .stl,.st.ok .stl{color:var(--ink)}
+.st.ok .stl{color:var(--teal)}
+
+/* ── LAYOUT ── */
+.wrap{display:grid;grid-template-columns:1fr 280px;max-width:1140px;margin:0 auto;min-height:calc(100vh - 100px)}
+.main{padding:32px 40px 64px;min-width:0}
+.side{border-left:1px solid var(--line);padding:22px 18px;background:#fff;position:sticky;top:98px;height:calc(100vh - 98px);overflow-y:auto}
+
+/* ── PANELS ── */
+.panel{display:none}
+.panel.on{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ── TYPOGRAPHY ── */
+.stag{font-size:10px;font-weight:700;letter-spacing:.15em;color:var(--goldb);margin-bottom:8px}
+.stitle{font-family:'Fraunces',serif;font-size:30px;font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:12px}
+.sintro{font-size:14px;color:var(--ink2);line-height:1.75;max-width:560px;margin-bottom:26px;border-left:3px solid var(--goldp);padding-left:14px}
+
+/* ── DEF BOX ── */
+.def{background:var(--ink);border-radius:14px;padding:18px 22px;margin:0 0 22px}
+.def-tag{font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--goldb);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.def-tag::after{content:'';flex:1;height:1px;background:rgba(212,160,23,.2)}
+.def-body{color:rgba(255,255,255,.82);font-size:13px;line-height:1.75}
+.def-ex{margin-top:10px;background:rgba(255,255,255,.06);border-left:3px solid var(--goldb);padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;color:rgba(255,255,255,.68);line-height:1.6}
+.def-ex strong{color:var(--goldb)}
+
+/* ── CARD ── */
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;margin:0 0 18px;box-shadow:var(--sh)}
+.card-tag{font-size:10px;color:var(--ink3);font-weight:700;letter-spacing:.1em;margin-bottom:10px}
+.card-q{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:16px;line-height:1.4}
+
+/* ── MEMBER GRID ── */
+.mem-grid{display:grid;gap:12px;margin:16px 0}
+.mem-card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:16px;transition:border-color .2s}
+.mem-card.filled{border-color:var(--teal2)}
+.mem-num{font-size:10px;color:var(--ink3);font-weight:700;letter-spacing:.1em;margin-bottom:8px}
+.mem-input{width:100%;border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);background:transparent;margin-bottom:10px;transition:border-color .2s;outline:none}
+.mem-input:focus{border-color:var(--goldb)}
+.mem-risk-lbl{font-size:10px;color:var(--ink3);font-weight:600;margin-bottom:6px;display:block}
+.risk-mini{display:flex;gap:6px;flex-wrap:wrap}
+.rm{padding:5px 10px;border-radius:20px;border:1.5px solid var(--line);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;background:#fff;color:var(--ink3);user-select:none}
+.rm:hover{border-color:var(--ink)}
+.rm.p{background:var(--tealp);border-color:var(--teal2);color:var(--teal)}
+.rm.e{background:var(--goldp);border-color:var(--goldb);color:var(--goldb)}
+.rm.d{background:var(--redp);border-color:var(--red);color:var(--red)}
+.cnt-row{display:flex;align-items:center;gap:16px;margin:14px 0 22px}
+.cnt-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:#fff;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--ink);line-height:1}
+.cnt-btn:hover{border-color:var(--goldb);background:var(--goldp)}
+.cnt-num{font-family:'Fraunces',serif;font-size:44px;font-weight:700;color:var(--goldb);min-width:56px;text-align:center}
+
+/* ── AGG BOX ── */
+.agg{background:var(--ink);border-radius:16px;padding:22px;margin:18px 0;color:#fff}
+.agg-title{font-family:'Fraunces',serif;font-size:15px;color:var(--goldb);margin-bottom:14px;font-weight:600}
+.agg-bars{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.agg-row{display:flex;align-items:center;gap:10px}
+.agg-row-lbl{font-size:12px;color:rgba(255,255,255,.6);width:88px;flex-shrink:0}
+.agg-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.agg-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.fill-teal{background:#4ecca3}.fill-gold{background:var(--goldb)}.fill-red{background:#ff6b6b}
+.agg-pct{font-size:12px;font-weight:700;font-family:'Fraunces',serif;width:34px;text-align:right;color:rgba(255,255,255,.8)}
+.agg-result{background:rgba(255,255,255,.08);border-radius:12px;padding:14px;text-align:center;border:1px solid rgba(255,255,255,.1);margin-bottom:0}
+.agg-res-tag{font-size:10px;color:rgba(255,255,255,.45);margin-bottom:6px;letter-spacing:.1em;font-weight:600}
+.agg-res-val{font-family:'Fraunces',serif;font-size:26px;font-weight:700;margin-bottom:4px}
+.agg-res-sub{font-size:12px;color:rgba(255,255,255,.5)}
+
+/* ── RISK OVERRIDE ── */
+.ro-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+.ro{border:2px solid var(--line);border-radius:12px;padding:16px 12px;cursor:pointer;text-align:center;background:#fff;transition:all .2s;user-select:none}
+.ro:hover{transform:translateY(-2px);box-shadow:var(--shm)}
+.ro.sel{border-color:var(--goldb);background:var(--goldp)}
+.ro-ico{font-size:24px;margin-bottom:6px}
+.ro-name{font-weight:800;font-size:13px;color:var(--ink);margin-bottom:4px}
+.ro-loss{font-family:'Fraunces',serif;font-size:17px;font-weight:700;margin-bottom:4px}
+.ro.prud .ro-loss{color:var(--teal)}.ro.equi .ro-loss{color:var(--goldb)}.ro.dyna .ro-loss{color:var(--red)}
+.ro-tri{font-size:11px;color:var(--ink3)}
+
+/* ── CLASS LIST ── */
+.cls-list{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+.cls-item{border:2px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff;transition:border-color .2s}
+.cls-item.rec{border-color:var(--teal2);background:var(--tealp)}
+.cls-item.avoid{border-color:rgba(185,28,28,.2);background:var(--redp)}
+.cls-toggle{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;cursor:pointer}
+.cls-toggle input[type=checkbox]{width:18px;height:18px;accent-color:var(--goldb);cursor:pointer;flex-shrink:0;margin-top:2px}
+.cls-item-title{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:5px}
+.cls-item.rec .cls-item-title{color:var(--teal)}
+.cls-item.avoid .cls-item-title{color:var(--red)}
+.cls-item-body{font-size:12px;color:var(--ink2);line-height:1.55}
+.cls-item-ex{font-size:11px;color:var(--ink3);font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid rgba(0,0,0,.07)}
+.cls-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+
+/* ── PILLS ── */
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;margin:2px 2px 0 0}
+.pg{background:var(--tealp);color:var(--teal)}
+.pa{background:var(--ambp);color:var(--amb)}
+.pr{background:var(--redp);color:var(--red)}
+.pk{background:var(--bg3);color:var(--ink2)}
+
+/* ── SLIDER ── */
+.slw{margin:14px 0 4px}
+.slr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sll{font-size:13px;color:var(--ink2)}
+.slv{font-size:22px;font-weight:700;color:var(--ink);font-family:'Fraunces',serif}
+input[type=range]{width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--bg3);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--goldb);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+.slh{display:flex;justify-content:space-between;margin-top:4px}
+.slh span{font-size:10px;color:var(--ink3)}
+
+/* ── OPT BUTTONS ── */
+.opts3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.opt{border:2px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;background:#fff;text-align:left;transition:all .2s;user-select:none}
+.opt:hover{border-color:var(--ink);background:var(--bg);transform:translateY(-1px)}
+.opt.sel{border-color:var(--goldb);background:var(--goldp)}
+.opt-t{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px}
+.opt-b{font-size:12px;color:var(--ink2);line-height:1.5;margin-bottom:6px}
+.opt-ex{font-size:11px;color:var(--ink3);font-style:italic;padding-top:6px;border-top:1px solid var(--line)}
+
+/* ── DASH ── */
+.dash{background:var(--ink);border-radius:16px;padding:22px;margin:16px 0;color:#fff}
+.dash-title{font-family:'Fraunces',serif;font-size:15px;color:var(--goldb);margin-bottom:14px;font-weight:600}
+.dg3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.dg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.dc{background:rgba(255,255,255,.06);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,.08)}
+.dcl{font-size:10px;color:rgba(255,255,255,.45);margin-bottom:4px;font-weight:600;letter-spacing:.06em}
+.dcv{font-size:19px;font-weight:700;font-family:'Fraunces',serif}
+.dcv.gd{color:var(--goldb)}.dcv.tl{color:#4ecca3}.dcv.rd{color:#ff6b6b}
+
+/* ── CALC BOX ── */
+.calc{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;padding:18px 20px;margin:16px 0}
+.calc-t{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.calc-t::before{content:'🧮';font-size:15px}
+.calc3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.cc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
+.ccl{font-size:10px;color:var(--ink3);margin-bottom:4px;font-weight:600;letter-spacing:.06em}
+.ccv{font-size:18px;font-weight:700;color:var(--ink);font-family:'Fraunces',serif}
+.ccv.gd{color:var(--gold)}.ccv.tl{color:var(--teal)}
+.calc-f{background:#fff;border-radius:8px;padding:10px 12px;font-size:12px;color:var(--ink2);line-height:1.7;border-left:3px solid var(--goldp)}
+.calc-f strong{color:var(--ink)}
+
+/* ── ALERTS ── */
+.al{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;margin:8px 0}
+.al-ico{font-size:17px;flex-shrink:0;line-height:1.3}
+.al.info{background:rgba(20,18,32,.05)}
+.al.ok{background:var(--tealp)}
+.al.warn{background:var(--ambp)}
+.al.bad{background:var(--redp)}
+
+/* ── DIVIDER ── */
+.div{display:flex;align-items:center;gap:12px;margin:24px 0 16px}
+.div span{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--ink);white-space:nowrap}
+.div::before,.div::after{content:'';flex:1;height:1px;background:var(--line)}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.tbl th{background:var(--ink);color:rgba(255,255,255,.75);padding:8px 11px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.08em}
+.tbl th:first-child{border-radius:8px 0 0 0}.tbl th:last-child{border-radius:0 8px 0 0}
+.tbl td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:middle;color:var(--ink2)}
+.tbl td strong{color:var(--ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg)}
+
+/* ── KPI ── */
+.kpi2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.kb{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff}
+.kbl{font-size:10px;color:var(--ink3);margin-bottom:4px;font-weight:600}
+.kbv{font-size:19px;font-weight:700;font-family:'Fraunces',serif}
+.kbs{font-size:11px;margin-top:2px}
+.kba{font-size:11px;color:var(--ink3);margin-top:2px}
+.ki-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.ki-wrap label{display:block;font-size:11px;color:var(--ink3);margin-bottom:5px;font-weight:600}
+.ki-wrap input{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;font-size:16px;font-family:'Fraunces',serif;font-weight:700;color:var(--ink);background:#fff;transition:border-color .2s;outline:none}
+.ki-wrap input:focus{border-color:var(--goldb)}
+
+/* ── CBOX ── */
+.cbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+.cbox-t{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:10px}
+canvas{width:100%!important}
+
+/* ── SYNTH ── */
+.bignum{background:var(--ink);border-radius:18px;padding:32px;text-align:center;margin:20px 0;position:relative;overflow:hidden}
+.bignum::after{content:'◆';position:absolute;font-size:160px;color:rgba(212,160,23,.05);top:-10px;right:-10px;line-height:1;pointer-events:none}
+.bn-tag{font-size:10px;letter-spacing:.15em;color:rgba(255,255,255,.4);margin-bottom:10px;font-weight:600}
+.bn-val{font-family:'Fraunces',serif;font-size:62px;font-weight:700;color:var(--goldb);line-height:1}
+.bn-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:10px}
+.sc4{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.sc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh)}
+.sc-tag{font-size:10px;color:var(--ink3);font-weight:600;letter-spacing:.08em;margin-bottom:5px}
+.sc-val{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--ink)}
+.sc-val.gd{color:var(--gold)}.sc-val.tl{color:var(--teal)}
+.sc-sub{font-size:11px;color:var(--ink3);margin-top:3px}
+
+/* ── TIMELINE ── */
+.tl{padding-left:24px;position:relative;margin:14px 0}
+.tl::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--bg3)}
+.tli{position:relative;margin-bottom:18px}
+.tli::before{content:'';position:absolute;left:-19px;top:5px;width:12px;height:12px;border-radius:50%;border:2px solid #fff}
+.tli.gd::before{background:var(--goldb)}.tli.tl_::before{background:var(--teal2)}.tli.dk::before{background:var(--ink2)}
+.tl-ph{font-size:10px;color:var(--ink3);font-weight:700;margin-bottom:2px;letter-spacing:.06em}
+.tl-ev{font-size:13px;font-weight:700;color:var(--ink)}
+.tl-dt{font-size:12px;color:var(--ink2);margin-top:2px}
+
+/* ── MEMBER SUMMARY ── */
+.ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:10px 0}
+.ms-card{background:var(--bg2);border-radius:10px;padding:9px 11px;border-left:3px solid var(--line)}
+.ms-card.prud{border-left-color:var(--teal2)}
+.ms-card.equi{border-left-color:var(--goldb)}
+.ms-card.dyna{border-left-color:var(--red)}
+.ms-name{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.ms-risk{font-size:11px;color:var(--ink3)}
+
+/* ── BUTTONS ── */
+.brow{display:flex;gap:10px;margin-top:26px;align-items:center;flex-wrap:wrap}
+.btn{border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s}
+.bd{background:var(--ink);color:#fff}.bd:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:var(--shm)}
+.bg{background:var(--goldb);color:#fff}.bg:hover{background:var(--gold);transform:translateY(-1px);box-shadow:var(--shm)}
+.bgh{background:transparent;color:var(--ink3);border:1.5px solid var(--line)}.bgh:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ── ASIDE ── */
+.aside-tag{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--goldb);margin-bottom:10px}
+.aside-sum{background:var(--bg2);border-radius:12px;padding:11px;margin-bottom:16px}
+.ar{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--line);font-size:11px}
+.ar:last-child{border:none}
+.arkey{color:var(--ink3)}
+.arval{font-weight:700;color:var(--ink);font-family:'Fraunces',serif;font-size:12px}
+.aside-tip{background:#fff;border-radius:10px;padding:11px;font-size:12px;line-height:1.65;border-left:3px solid var(--goldb);color:var(--ink2);margin-bottom:16px}
+.aside-prog{display:flex;flex-direction:column;gap:4px}
+.ap{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:8px;cursor:pointer;font-size:11px;transition:background .15s;user-select:none}
+.ap:hover{background:var(--bg)}
+.ap.cur{background:var(--goldp);font-weight:600;color:var(--ink)}
+.ap.done{color:var(--teal)}
+.apdot{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;flex-shrink:0}
+
+/* ── VERDICT ── */
+.verdict{border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.65;margin:12px 0;border:1px solid var(--line)}
+.verdict.ok{background:var(--tealp);border-color:var(--teal2)}
+.verdict.warn{background:var(--ambp);border-color:var(--amb)}
+.verdict.bad{background:var(--redp);border-color:var(--red)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .wrap{grid-template-columns:1fr}
+  .side{display:none}
+  .main{padding:22px 16px 60px}
+  .opts3,.ro-grid,.calc3,.dg3,.sc4,.ki-grid,.kpi2{grid-template-columns:1fr 1fr}
+  .mem-grid{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:500px){
+  .opts3,.ro-grid,.calc3,.dg3,.sc4,.ki-grid,.kpi2,.dg2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-brand">Club d'Investissement<span class="hdr-sub" style="margin-left:8px">Stratégie · 2025–2026</span></div>
+  <div class="hdr-tag">CONFIDENTIEL</div>
+</header>
+
+<nav class="snav" id="snav">
+  <div class="st cur" data-step="0"><div class="stn">1</div><span class="stl">Membres</span></div>
+  <div class="st lock" data-step="1"><div class="stn">2</div><span class="stl">Profil risque</span></div>
+  <div class="st lock" data-step="2"><div class="stn">3</div><span class="stl">Classes</span></div>
+  <div class="st lock" data-step="3"><div class="stn">4</div><span class="stl">Rendement</span></div>
+  <div class="st lock" data-step="4"><div class="stn">5</div><span class="stl">Capital</span></div>
+  <div class="st lock" data-step="5"><div class="stn">6</div><span class="stl">Répartition</span></div>
+  <div class="st lock" data-step="6"><div class="stn">7</div><span class="stl">Suivi</span></div>
+  <div class="st lock" data-step="7"><div class="stn">8</div><span class="stl">Synthèse</span></div>
+</nav>
+
+<div class="wrap">
+<main class="main" id="main">
+
+<!-- ═══ P0 : MEMBRES ═══ -->
+<section class="panel on" id="p0">
+  <div class="stag">ÉTAPE 01 — POINT DE DÉPART</div>
+  <h1 class="stitle">Qui compose le club ?</h1>
+  <p class="sintro">Chaque membre indique son prénom et son niveau de tolérance à la perte. La stratégie du club sera construite à partir de ces réponses individuelles.</p>
+
+  <div class="def">
+    <div class="def-tag">POURQUOI COMMENCER PAR LE PROFIL DE CHACUN ?</div>
+    <p class="def-body">Si le club prend des risques que certains membres ne supportent pas, le premier mauvais mois peut provoquer des conflits ou des départs. Mieux vaut fixer les règles du jeu collectivement dès le début.</p>
+    <div class="def-ex"><strong>Les 3 profils :</strong><br>
+    🛡️ <strong style="color:#4ecca3">Prudent</strong> — Je peux perdre jusqu'à 20% sans paniquer. Je préfère la sécurité.<br>
+    ⚖️ <strong style="color:var(--goldb)">Équilibré</strong> — J'accepte −40% pour espérer gagner plus. Je suis patient.<br>
+    🚀 <strong style="color:#ff6b6b">Dynamique</strong> — Je tolère −60%. Je vise le maximum sur le long terme.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-tag">NOMBRE DE MEMBRES</div>
+    <div class="card-q">Combien y a-t-il de membres dans le club ? (2 à 20)</div>
+    <div class="cnt-row">
+      <button class="cnt-btn" id="btn-minus">−</button>
+      <div class="cnt-num" id="cnt-num">5</div>
+      <button class="cnt-btn" id="btn-plus">+</button>
+      <span style="font-size:13px;color:var(--ink3)">membres</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-tag">PROFIL DE CHAQUE MEMBRE</div>
+    <div class="card-q">Saisissez le prénom de chaque membre et son profil :</div>
+    <div class="mem-grid" id="mem-grid"></div>
+  </div>
+
+  <div class="brow">
+    <button class="btn bd" id="btn-validate-members">Calculer le profil du groupe →</button>
+  </div>
+  <div id="member-err" style="margin-top:10px"></div>
+</section>
+
+<!-- ═══ P1 : PROFIL RISQUE ═══ -->
+<section class="panel" id="p1">
+  <div class="stag">ÉTAPE 02 — PROFIL DE RISQUE COLLECTIF</div>
+  <h1 class="stitle">Le profil risque<br>de votre groupe</h1>
+  <p class="sintro">Voici la synthèse des profils individuels. Le groupe peut valider ou modifier ce résultat avant de continuer.</p>
+
+  <div class="card">
+    <div class="card-tag">MEMBRES DU CLUB</div>
+    <div class="ms-grid" id="p1-ms-grid"></div>
+  </div>
+
+  <div class="agg" id="agg-box">
+    <div class="agg-title">📊 Résultat — Répartition des profils</div>
+    <div class="agg-bars">
+      <div class="agg-row"><span class="agg-row-lbl">🛡️ Prudents</span><div class="agg-bar-wrap"><div class="agg-fill fill-teal" id="bar-prud" style="width:0%"></div></div><span class="agg-pct" id="pct-prud">0%</span></div>
+      <div class="agg-row"><span class="agg-row-lbl">⚖️ Équilibrés</span><div class="agg-bar-wrap"><div class="agg-fill fill-gold" id="bar-equi" style="width:0%"></div></div><span class="agg-pct" id="pct-equi">0%</span></div>
+      <div class="agg-row"><span class="agg-row-lbl">🚀 Dynamiques</span><div class="agg-bar-wrap"><div class="agg-fill fill-red" id="bar-dyna" style="width:0%"></div></div><span class="agg-pct" id="pct-dyna">0%</span></div>
+    </div>
+    <div class="agg-result">
+      <div class="agg-res-tag">PROFIL CALCULÉ DU GROUPE</div>
+      <div class="agg-res-val" id="agg-res-val">—</div>
+      <div class="agg-res-sub" id="agg-res-sub">—</div>
+    </div>
+  </div>
+  <div class="al warn" id="agg-note"><div class="al-ico">ℹ️</div><div id="agg-note-txt">—</div></div>
+
+  <div class="card">
+    <div class="card-tag">VALIDATION OU MODIFICATION PAR VOTE</div>
+    <div class="card-q">Le groupe confirme-t-il ce profil ?</div>
+    <div class="ro-grid" id="ro-grid"></div>
+    <div id="risk-msg" style="margin-top:12px"></div>
+  </div>
+
+  <div class="brow">
+    <button class="btn bgh" onclick="NAV.go(0)">← Retour</button>
+    <button class="btn bd" id="btn-to-classes">Voir les classes recommandées →</button>
+  </div>
+</section>
+
+<!-- ═══ P2 : CLASSES ═══ -->
+<section class="panel" id="p2">
+  <div class="stag">ÉTAPE 03 — CLASSES D'ACTIFS</div>
+  <h1 class="stitle">Dans quoi<br>allons-nous investir ?</h1>
+  <p class="sintro" id="cls-intro">Les classes recommandées dépendent de votre profil. Vous pouvez modifier la sélection.</p>
+
+  <div class="def">
+    <div class="def-tag">C'EST QUOI UNE CLASSE D'ACTIFS ?</div>
+    <p class="def-body">C'est une famille d'investissement. Chaque famille a ses règles de rendement, de risque et de durée. Comme en cuisine : viande, légumes et féculents ne se cuisinent pas pareil.</p>
+    <div class="def-ex"><strong>Exemple :</strong> Mettre de l'argent dans une PME (on devient associé) vs prêter à une PME (on touche des intérêts mensuels) — c'est deux familles très différentes.</div>
+  </div>
+
+  <div class="al info" id="cls-profile-note"><div class="al-ico">🎯</div><div id="cls-profile-txt">—</div></div>
+  <div class="cls-list" id="cls-list"></div>
+  <div class="al info"><div class="al-ico">🌍</div><div><strong>Exclusions fixes :</strong> Pétrole, mines, énergies fossiles — et opérations hors France (impossible de vérifier à distance).</div></div>
+
+  <div class="brow">
+    <button class="btn bgh" onclick="NAV.go(1)">← Retour</button>
+    <button class="btn bd" id="btn-to-tri">Valider et continuer →</button>
+  </div>
+</section>
+
+<!-- ═══ P3 : RENDEMENT ═══ -->
+<section class="panel" id="p3">
+  <div class="stag">ÉTAPE 04 — RENDEMENT MINIMUM</div>
+  <h1 class="stitle">Quel gain minimum<br>on exige ?</h1>
+  <p class="sintro">On fixe un seuil : si le gain prévu d'un investissement est en dessous, on dit non automatiquement. Ça nous protège contre les projets qui ne valent pas le risque.</p>
+
+  <div class="def">
+    <div class="def-tag">C'EST QUOI LE RENDEMENT ?</div>
+    <p class="def-body">C'est ce que votre argent rapporte chaque année, en %. Si vous mettez 1 000 € et récupérez 1 080 € un an après, le rendement est 8%.</p>
+    <div class="def-ex">
+      <strong>Exemple concret :</strong><br>
+      — On investit <strong>5 000 €</strong> dans une PME en 2025.<br>
+      — En 2030 (5 ans plus tard), on récupère <strong>8 000 €</strong>.<br>
+      — Gain : 3 000 €. Rendement annuel moyen ≈ <strong>10%/an</strong>.<br>
+      — Si notre seuil est 12% et ce deal rapporte 10% → on refuse.
+    </div>
+  </div>
+
+  <div id="tri-sliders"></div>
+
+  <div class="div"><span>Simulation du rendement global du club</span></div>
+  <div class="def">
+    <div class="def-tag">COMMENT ON CALCULE LE RENDEMENT DU CLUB ?</div>
+    <p class="def-body">Le club a plusieurs investissements en même temps. Le rendement global = moyenne pondérée selon la répartition de l'argent.</p>
+    <div class="def-ex"><strong>Exemple :</strong> 60% dans des PME à 15%/an + 40% en prêts à 8%/an = 60%×15 + 40%×8 = <strong>12,2%/an</strong> pour le club.</div>
+  </div>
+
+  <div class="dash">
+    <div class="dash-title">📐 Simulateur de rendement global</div>
+    <div class="dg3">
+      <div class="dc"><div class="dcl">PART PME</div><div class="dcv gd" id="d-pe">—</div></div>
+      <div class="dc"><div class="dcl">PART PRÊTS</div><div class="dcv gd" id="d-cl">—</div></div>
+      <div class="dc"><div class="dcl">RENDEMENT ESTIMÉ</div><div class="dcv tl" id="d-blend">—</div></div>
+    </div>
+    <div style="color:rgba(255,255,255,.5);font-size:12px;margin-bottom:6px" id="d-blend-lbl">Ajustez la répartition :</div>
+    <input type="range" id="blend-slider" min="30" max="80" value="65" step="5" style="background:rgba(255,255,255,.1)">
+    <div class="cbox" style="margin-top:14px">
+      <div class="cbox-t">📊 Rendement selon la répartition choisie</div>
+      <canvas id="c-tri" height="140"></canvas>
+    </div>
+  </div>
+
+  <div class="calc">
+    <div class="calc-t">Concrètement sur 10 000 €</div>
+    <div class="calc3">
+      <div class="cc"><div class="ccl">MISE</div><div class="ccv">10 000 €</div></div>
+      <div class="cc"><div class="ccl">GAIN/AN</div><div class="ccv gd" id="calc-gain">—</div></div>
+      <div class="cc"><div class="ccl">VALEUR À 5 ANS</div><div class="ccv tl" id="calc-5y">—</div></div>
+    </div>
+    <div class="calc-f" id="calc-f">—</div>
+  </div>
+
+  <div class="brow">
+    <button class="btn bgh" onclick="NAV.go(2)">← Retour</button>
+    <button class="btn bd" onclick="NAV.advance(4)">Étape suivante →</button>
+  </div>
+</section>
+
+<!-- ═══ P4 : CAPITAL ═══ -->
+<section class="panel" id="p4">
+  <div class="stag">ÉTAPE 05 — CAPITAL DU CLUB</div>
+  <h1 class="stitle">Comment constituer<br>le capital du club ?</h1>
+  <p class="sintro">Le capital du premier investissement vient de deux sources : un <strong>apport initial unique</strong> de chaque membre, et des <strong>cotisations mensuelles</strong> pendant un nombre de mois choisi. C'est ce total qui détermine ce que le club peut faire.</p>
+
+  <div class="def">
+    <div class="def-tag">COMMENT ÇA FONCTIONNE ?</div>
+    <p class="def-body">Chaque membre apporte une somme au démarrage, puis cotise chaque mois. Après le nombre de mois choisi, on additionne tout. Ce total = capital disponible pour le premier investissement.</p>
+    <div class="def-ex">
+      <strong>Exemple :</strong> 5 membres × 500 € d'apport = 2 500 € jour 1.<br>
+      + 5 membres × 100 €/mois × 12 mois = 6 000 €.<br>
+      Total après 12 mois = <strong>8 500 €</strong> pour le premier deal.
+    </div>
+  </div>
+
+  <!-- Bloc 1 : Apport initial -->
+  <div class="card">
+    <div class="card-tag">BLOC 1 — APPORT INITIAL (versement unique au démarrage)</div>
+    <div class="card-q">Combien chaque membre apporte-t-il au démarrage ?</div>
+    <div class="al info"><div class="al-ico">💡</div><div>Peut être 0 € si le club préfère démarrer uniquement avec les cotisations mensuelles.</div></div>
+    <div class="slw" style="margin-top:14px">
+      <div class="slr"><span class="sll">Apport initial par membre</span><span class="slv" id="init-lbl">500 €</span></div>
+      <input type="range" id="init-slider" min="0" max="2000" value="500" step="100">
+      <div class="slh"><span>0 €</span><span>500 €</span><span>1 000 €</span><span>1 500 €</span><span>2 000 €</span></div>
+    </div>
+    <div class="calc3" style="margin-top:14px">
+      <div class="cc"><div class="ccl">PAR MEMBRE</div><div class="ccv" id="init-pp">500 €</div></div>
+      <div class="cc"><div class="ccl">MEMBRES</div><div class="ccv" id="init-n">5</div></div>
+      <div class="cc"><div class="ccl">TOTAL J1</div><div class="ccv gd" id="init-total">2 500 €</div></div>
+    </div>
+  </div>
+
+  <!-- Bloc 2 : Cotisation mensuelle -->
+  <div class="card">
+    <div class="card-tag">BLOC 2 — COTISATION MENSUELLE</div>
+    <div class="card-q">Combien chaque membre verse-t-il chaque mois ?</div>
+    <div class="opts3" id="scen-opts">
+      <div class="opt" id="sc-A"><div class="opt-t">50 €/mois</div><div class="opt-b" id="sA-total">—</div><div class="opt-ex">Effort léger, accumulation lente</div><span class="pill pk" id="sA-pill">—</span></div>
+      <div class="opt sel" id="sc-B"><div class="opt-t">100 €/mois ✓</div><div class="opt-b" id="sB-total">—</div><div class="opt-ex">Bon équilibre effort / vitesse</div><span class="pill pg" id="sB-pill">Recommandé</span></div>
+      <div class="opt" id="sc-C"><div class="opt-t">150 €/mois</div><div class="opt-b" id="sC-total">—</div><div class="opt-ex">Effort élevé, accès rapide</div><span class="pill pa" id="sC-pill">—</span></div>
+    </div>
+  </div>
+
+  <!-- Bloc 3 : Mois avant premier deal -->
+  <div class="card">
+    <div class="card-tag">BLOC 3 — DURÉE D'ACCUMULATION AVANT LE PREMIER DEAL</div>
+    <div class="card-q">Combien de mois le club se donne-t-il avant de faire le premier investissement ?</div>
+    <div class="al info"><div class="al-ico">💡</div><div>C'est vous qui décidez. Plus vous attendez, plus vous avez de capital — mais l'argent qui dort ne travaille pas.</div></div>
+    <div class="slw" style="margin-top:14px">
+      <div class="slr"><span class="sll">Mois de cotisation avant le 1er deal</span><span class="slv" id="mois-lbl">12 mois</span></div>
+      <input type="range" id="mois-slider" min="3" max="36" value="12" step="1">
+      <div class="slh"><span>3 mois</span><span>12 mois</span><span>24 mois</span><span>36 mois</span></div>
+    </div>
+  </div>
+
+  <!-- Résultat consolidé -->
+  <div class="dash">
+    <div class="dash-title">🏦 Capital total disponible pour le premier investissement</div>
+    <div class="dg3">
+      <div class="dc"><div class="dcl">APPORT INITIAL</div><div class="dcv gd" id="res-init">—</div></div>
+      <div class="dc"><div class="dcl">COTISATIONS CUMULÉES</div><div class="dcv gd" id="res-cotis">—</div></div>
+      <div class="dc"><div class="dcv tl" id="res-total" style="font-size:24px;margin-top:6px">—</div><div class="dcl" style="margin-top:4px">CAPITAL TOTAL 1ER DEAL</div></div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:10px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.1)">
+      <div style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:7px;font-weight:600;letter-spacing:.08em">DÉCOMPOSITION DU CALCUL</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.8" id="res-formula">—</div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,.1)">
+      <div style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:5px;font-weight:600;letter-spacing:.08em">VERDICT</div>
+      <div id="res-verdict" style="font-size:13px;line-height:1.6">—</div>
+    </div>
+    <div class="cbox" style="margin-top:16px">
+      <div class="cbox-t">📈 Évolution du capital dans le temps</div>
+      <canvas id="c-cap" height="150"></canvas>
+    </div>
+  </div>
+
+  <div class="calc">
+    <div class="calc-t">Projection et règle des 20%</div>
+    <div class="calc3">
+      <div class="cc"><div class="ccl">CAPITAL À 1 AN</div><div class="ccv gd" id="cap12">—</div></div>
+      <div class="cc"><div class="ccl">CAPITAL À 2 ANS</div><div class="ccv gd" id="cap24">—</div></div>
+      <div class="cc"><div class="ccl">CAPITAL À 3 ANS</div><div class="ccv tl" id="cap36">—</div></div>
+    </div>
+    <div class="calc-f" id="pe-calc-f">—</div>
+  </div>
+
+  <div class="div"><span>Montants par opération</span></div>
+  <div id="ticket-table"></div>
+
+  <div class="brow">
+    <button class="btn bgh" onclick="NAV.go(3)">← Retour</button>
+    <button class="btn bd" onclick="NAV.advance(5)">Étape suivante →</button>
+  </div>
+</section>
+
+<!-- ═══ P5 : RÉPARTITION ═══ -->
+<section class="panel" id="p5">
+  <div class="stag">ÉTAPE 06 — RÉPARTITION ET RÈGLES</div>
+  <h1 class="stitle">Comment répartir<br>pour ne pas tout perdre ?</h1>
+  <p class="sintro">Les règles de répartition protègent le club contre une mauvaise surprise sur un seul investissement.</p>
+
+  <div class="card">
+    <div class="card-tag">RÉPARTITION PME / PRÊTS</div>
+    <div class="card-q">Comment diviser le capital entre les types d'investissement ?</div>
+    <div id="alloc-bars"></div>
+  </div>
+
+  <div class="div"><span>Règles de protection (adaptées à votre profil)</span></div>
+  <div id="rules-table"></div>
+
+  <div class="calc">
+    <div class="calc-t">Exemple avec votre capital au moment du 1er deal</div>
+    <div class="calc-f" id="alloc-ex">—</div>
+  </div>
+
+  <div class="div"><span>Qui vote pour quoi ?</span></div>
+  <table class="tbl"><thead><tr><th>Montant</th><th>Ce qu'on vérifie</th><th>Délai</th><th>Vote requis</th></tr></thead><tbody id="vote-tbl"></tbody></table>
+  <div class="al info"><div class="al-ico">💡</div><div>"Vérifier" = aller confirmer que ce que l'entreprise dit est vrai (comptes, clients, légalité). Comme inspecter une maison avant de l'acheter.</div></div>
+
+  <div class="brow">
+    <button class="btn bgh" onclick="NAV.go(4)">← Retour</button>
+    <button class="btn bd" onclick="NAV.advance(6)">Étape suivante →</button>
+  </div>
+</section>
+
+<!-- ═══ P6 : SUIVI ═══ -->
+<section class="panel" id="p6">
+  <div class="stag">ÉTAPE 07 — SUIVI</div>
+  <h1 class="stitle">Les signaux d'alerte<br>du club</h1>
+  <p class="sintro">8 indicateurs à surveiller régulièrement. Si un passe au rouge, réunion d'urgence.</p>
+
+  <div class="def">
+    <div class="def-tag">C'EST QUOI UN INDICATEUR DE SUIVI ?</div>
+    <p class="def-body">C'est un chiffre qu'on lit chaque mois, comme la jauge d'essence. Vert = tout va bien. Orange = surveiller. Rouge = action immédiate.</p>
+    <div class="def-ex"><strong>Exemple :</strong> Si on a investi 10 000 € et que ça vaut 12 000 € aujourd'hui → on a multiplié par 1,2x. En dessous de 1,0x, on perd de l'argent.</div>
+  </div>
+
+  <table class="tbl" style="margin-bottom:18px"><thead><tr><th>#</th><th>Ce qu'on surveille</th><th>Quand</th><th>🟡 Alerte</th><th>🔴 Urgence</th></tr></thead><tbody id="kpi-tbl"></tbody></table>
+
+  <div class="div"><span>Tableau de bord — testez vos chiffres</span></div>
+  <div class="card">
+    <div class="card-tag">SIMULATEUR MENSUEL</div>
+    <div class="card-q">Entrez les valeurs du mois pour voir les alertes :</div>
+    <div class="ki-grid">
+      <div class="ki-wrap"><label id="cotis-lbl">Membres qui ont payé (sur 5)</label><input type="number" id="ki-cotis" value="5" min="0" max="20"></div>
+      <div class="ki-wrap"><label>Réserve disponible (%)</label><input type="number" id="ki-treso" value="15" min="0" max="100"></div>
+      <div class="ki-wrap"><label>Prêts non remboursés (%)</label><input type="number" id="ki-defaut" value="3" min="0" max="50"></div>
+      <div class="ki-wrap"><label>Investissements actifs</label><input type="number" id="ki-lignes" value="10" min="0" max="50"></div>
+    </div>
+    <div class="kpi2" id="kpi-board"></div>
+    <div id="kpi-concl" style="margin-top:10px"></div>
+  </div>
+
+  <div class="brow">
+    <button class="btn bgh" onclick="NAV.go(5)">← Retour</button>
+    <button class="btn bg" onclick="NAV.advance(7)">Voir la synthèse finale →</button>
+  </div>
+</section>
+
+<!-- ═══ P7 : SYNTHÈSE ═══ -->
+<section class="panel" id="p7">
+  <div class="stag">ÉTAPE 08 — SYNTHÈSE FINALE</div>
+  <h1 class="stitle">Stratégie complète —<br>Prête pour la plénière S3</h1>
+  <p class="sintro">Résumé de tous vos choix. À présenter et comparer avec la proposition du Groupe B.</p>
+
+  <div class="bignum">
+    <div class="bn-tag">RENDEMENT GLOBAL ESTIMÉ DU PORTEFEUILLE</div>
+    <div class="bn-val" id="f-tri">—</div>
+    <div class="bn-sub" id="f-tri-sub">par an en moyenne</div>
+  </div>
+
+  <div class="sc4">
+    <div class="sc"><div class="sc-tag">MEMBRES</div><div class="sc-val" id="f-members">—</div><div class="sc-sub" id="f-members-sub">—</div></div>
+    <div class="sc"><div class="sc-tag">PROFIL DE RISQUE</div><div class="sc-val" id="f-risk">—</div><div class="sc-sub" id="f-risk-sub">—</div></div>
+    <div class="sc"><div class="sc-tag">CLASSES RETENUES</div><div class="sc-val tl" id="f-classes">—</div><div class="sc-sub" id="f-classes-sub">—</div></div>
+    <div class="sc"><div class="sc-tag">CAPITAL 1ER DEAL</div><div class="sc-val gd" id="f-capital">—</div><div class="sc-sub" id="f-capital-sub">—</div></div>
+  </div>
+
+  <div class="div"><span>Les membres</span></div>
+  <div class="ms-grid" id="f-ms-grid"></div>
+
+  <div class="div"><span>Feuille de route</span></div>
+  <div class="tl" id="f-tl"></div>
+
+  <div class="div"><span>Refus automatique d'un deal si...</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0" id="f-rejections"></div>
+
+  <div class="al ok" style="margin-top:16px"><div class="al-ico">🏆</div><div><strong>Proposition Groupe A — prête pour la plénière S3.</strong> À confronter avec le Groupe B pour voter collectivement sur les divergences.</div></div>
+
+  <div class="brow">
+    <button class="btn bgh" onclick="NAV.go(6)">← Retour</button>
+    <button class="btn bg" onclick="window.print()">🖨️ Imprimer / PDF</button>
+  </div>
+</section>
+
+</main>
+
+<aside class="side">
+  <div style="margin-bottom:16px">
+    <div class="aside-tag">VOS CHOIX</div>
+    <div class="aside-sum">
+      <div class="ar"><span class="arkey">Membres</span><span class="arval" id="sb-n">—</span></div>
+      <div class="ar"><span class="arkey">Profil groupe</span><span class="arval" id="sb-risk">—</span></div>
+      <div class="ar"><span class="arkey">Classes</span><span class="arval" id="sb-cls">—</span></div>
+      <div class="ar"><span class="arkey">Seuil PME</span><span class="arval" id="sb-pe">—</span></div>
+      <div class="ar"><span class="arkey">Seuil Prêts</span><span class="arval" id="sb-cl">—</span></div>
+      <div class="ar"><span class="arkey">Rendement</span><span class="arval" id="sb-blend">—</span></div>
+      <div class="ar"><span class="arkey">Apport initial</span><span class="arval" id="sb-init">—</span></div>
+      <div class="ar"><span class="arkey">Cotisation</span><span class="arval" id="sb-cotis">—</span></div>
+      <div class="ar"><span class="arkey">Capital 1er deal</span><span class="arval" id="sb-capital">—</span></div>
+    </div>
+  </div>
+  <div style="margin-bottom:16px">
+    <div class="aside-tag">CONSEIL</div>
+    <div class="aside-tip" id="aside-tip">Renseignez les membres pour commencer.</div>
+  </div>
+  <div>
+    <div class="aside-tag">PROGRESSION</div>
+    <div class="aside-prog" id="aside-prog"></div>
+  </div>
+</aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════════════
+   STATE — source unique de vérité
+═══════════════════════════════════════════════ */
+const S = {
+  memberCount: 5,
+  members: [],            // [{name, risk}]
+  groupRisk: 'equi',      // 'prud'|'equi'|'dyna'
+  selectedClasses: [],    // ['pe','cl','scpi','oblig']
+  triPE: 12, triCL: 7,
+  allocPE: 65,
+  blended: 12.7,
+  capitalInit: 500,       // € par membre
+  scenario: 'B',          // 'A'|'B'|'C'
+  moisAvant: 12,
+  maxStep: 0
+};
+
+/* ═══════════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════════ */
+const RL = {prud:'Prudent', equi:'Équilibré', dyna:'Dynamique'};
+const RE = {prud:'🛡️', equi:'⚖️', dyna:'🚀'};
+const RL2 = {prud:'−20% max', equi:'−40% max', dyna:'−60% max'};
+const RTRI = {prud:'6–9%/an', equi:'12–15%/an', dyna:'15–20%/an'};
+const RS = {prud:1, equi:2, dyna:3};
+
+const STEP_NAMES = ['Membres','Profil risque','Classes','Rendement','Capital','Répartition','Suivi','Synthèse'];
+const TIPS = [
+  'Chaque membre choisit son profil individuel. Le profil du groupe sera calculé automatiquement.',
+  'Le profil calculé est une moyenne. Le groupe peut le modifier avant de continuer.',
+  'Les classes recommandées dépendent de votre profil. Vous pouvez adapter.',
+  'Le curseur vous montre l\'impact de la répartition PME/Prêts sur le rendement global.',
+  'Plus l\'apport initial est élevé, plus vite vous pouvez faire un premier deal PME.',
+  'La règle des 20% est la plus importante : elle empêche qu\'un seul bad deal coule le club.',
+  'Le tableau de bord mensuel prend 30 min. Ne pas le faire = investir à l\'aveugle.',
+  'Comparez cette stratégie avec le Groupe B en plénière et votez sur les divergences.'
+];
+
+const ALL_CLASSES = [
+  {
+    id:'pe', emoji:'🏭', title:'Investir dans des PME françaises',
+    body:'On entre au capital d\'une petite entreprise. On devient associé. Si elle grandit et est vendue, on récupère notre mise avec un bénéfice.',
+    ex:'Exemple : 5 000 € dans une boulangerie artisanale en 2025. En 2031, elle est rachetée — notre 5 000 € en valent 9 000 €.',
+    badges:[{l:'12–18%/an',c:'pg'},{l:'Bloqué 5–7 ans',c:'pk'}],
+    rec:{equi:true, dyna:true, prud:false},
+    warnMsg:{prud:'Peu recommandé pour un profil Prudent : argent bloqué 5–7 ans et pertes potentielles au-delà de votre limite.'}
+  },
+  {
+    id:'cl', emoji:'💳', title:'Prêter à des PME (crowdlending)',
+    body:'Via October, Tudigo... on prête à une PME. Elle rembourse chaque mois avec intérêts. Simple et accessible dès le premier mois.',
+    ex:'Exemple : 500 € prêtés à un artisan. Il rembourse 540 € sur 24 mois = 8%/an.',
+    badges:[{l:'7–10%/an',c:'pa'},{l:'Remboursements mensuels',c:'pk'}],
+    rec:{equi:true, dyna:true, prud:true},
+    warnMsg:{}
+  },
+  {
+    id:'scpi', emoji:'🏠', title:'Immobilier via SCPI',
+    body:'On achète des parts de fonds immobiliers et on touche des loyers sans gérer de locataires.',
+    ex:'Exemple : 2 000 € dans une SCPI de bureaux → ~120 €/an de loyers (6%). Stable mais peu spectaculaire.',
+    badges:[{l:'4–6%/an',c:'pa'},{l:'Ticket dès 1 000 €',c:'pg'}],
+    rec:{equi:false, dyna:false, prud:true},
+    warnMsg:{equi:'Rendement faible (4–6%) pour un Équilibré. Utile uniquement pour diversifier.',dyna:'Trop faible pour un profil Dynamique.'}
+  },
+  {
+    id:'oblig', emoji:'📄', title:'Obligations privées',
+    body:'Prêt formalisé via contrat juridique. Plus sécurisé sur le papier, mais complexe à gérer.',
+    ex:'Exemple : c\'est ce que font les banques avec les grandes entreprises. Nécessite un avocat.',
+    badges:[{l:'6–9%/an',c:'pa'},{l:'Complexe',c:'pr'}],
+    rec:{equi:false, dyna:false, prud:false},
+    warnMsg:{prud:'Trop complexe juridiquement pour un club débutant.',equi:'Complexe pour les gains obtenus.',dyna:'Complexe pour un rendement moyen.'}
+  }
+];
+
+let triChart = null, capChart = null;
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+const NAV = {
+  go(n) {
+    if (n > S.maxStep) return;
+    document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('on', i === n));
+    document.querySelectorAll('.st').forEach((t, i) => {
+      t.classList.remove('cur', 'ok', 'lock');
+      if (i === n) t.classList.add('cur');
+      else if (i < n) t.classList.add('ok');
+      else t.classList.add('lock');
+    });
+    S.step = n;
+    ASIDE.render();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    // rebuild dynamic sections
+    if (n === 1) RISK.renderAgg();
+    if (n === 2) CLASSES.render();
+    if (n === 3) { TRI.render(); setTimeout(TRI.drawChart, 80); }
+    if (n === 4) { CAP.render(); setTimeout(CAP.drawChart, 80); }
+    if (n === 5) ALLOC.render();
+    if (n === 6) KPI.render();
+    if (n === 7) SYNTH.render();
+  },
+
+  advance(n) {
+    S.maxStep = Math.max(S.maxStep, n);
+    // unlock nav tabs
+    document.querySelectorAll('.st').forEach((t, i) => {
+      if (i <= S.maxStep) t.classList.remove('lock');
+    });
+    this.go(n);
+  }
+};
+
+// click on nav tabs
+document.querySelectorAll('.st').forEach(t => {
+  t.addEventListener('click', () => {
+    const n = parseInt(t.dataset.step);
+    if (n <= S.maxStep) NAV.go(n);
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   ASIDE
+═══════════════════════════════════════════════ */
+const ASIDE = {
+  render() {
+    document.getElementById('aside-tip').textContent = TIPS[S.step] || TIPS[0];
+    document.getElementById('sb-n').textContent = S.memberCount + ' membres';
+    document.getElementById('sb-risk').textContent = S.groupRisk ? RE[S.groupRisk]+' '+RL[S.groupRisk] : '—';
+    document.getElementById('sb-cls').textContent = S.selectedClasses.length ? S.selectedClasses.length+' retenues' : '—';
+    document.getElementById('sb-pe').textContent = S.triPE + '%/an';
+    document.getElementById('sb-cl').textContent = S.triCL + '%/an';
+    document.getElementById('sb-blend').textContent = S.blended.toFixed(1) + '%/an';
+    document.getElementById('sb-init').textContent = S.capitalInit.toLocaleString('fr-FR') + ' €/membre';
+    document.getElementById('sb-cotis').textContent = {A:'50',B:'100',C:'150'}[S.scenario] + ' €/mois';
+    const {total} = CAP.compute();
+    document.getElementById('sb-capital').textContent = total.toLocaleString('fr-FR') + ' € (M'+S.moisAvant+')';
+
+    let html = '';
+    STEP_NAMES.forEach((l, i) => {
+      const done = i < S.step, cur = i === S.step, locked = i > S.maxStep;
+      html += `<div class="ap ${cur?'cur':done?'done':''}" style="opacity:${locked?.4:1}" onclick="if(${!locked})NAV.go(${i})">
+        <div class="apdot" style="background:${cur?'var(--goldb)':done?'var(--teal2)':'var(--bg3)'};color:${(cur||done)?'#fff':'var(--ink3)'}">${done?'✓':i+1}</div>
+        ${l}${locked?' 🔒':''}
+      </div>`;
+    });
+    document.getElementById('aside-prog').innerHTML = html;
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 0 — MEMBERS
+═══════════════════════════════════════════════ */
+const MEMBERS = {
+  init() {
+    document.getElementById('btn-minus').addEventListener('click', () => {
+      S.memberCount = Math.max(2, S.memberCount - 1);
+      document.getElementById('cnt-num').textContent = S.memberCount;
+      this.syncMembers();
+      this.renderGrid();
+    });
+    document.getElementById('btn-plus').addEventListener('click', () => {
+      S.memberCount = Math.min(20, S.memberCount + 1);
+      document.getElementById('cnt-num').textContent = S.memberCount;
+      this.syncMembers();
+      this.renderGrid();
+    });
+    document.getElementById('btn-validate-members').addEventListener('click', () => this.validate());
+    this.syncMembers();
+    this.renderGrid();
+  },
+
+  syncMembers() {
+    while (S.members.length < S.memberCount) S.members.push({name:'', risk:null});
+    S.members = S.members.slice(0, S.memberCount);
+  },
+
+  renderGrid() {
+    const grid = document.getElementById('mem-grid');
+    const cols = S.memberCount <= 4 ? '1fr 1fr' : S.memberCount <= 9 ? '1fr 1fr 1fr' : '1fr 1fr 1fr 1fr';
+    grid.style.gridTemplateColumns = cols;
+    grid.innerHTML = '';
+    S.members.forEach((m, i) => {
+      const div = document.createElement('div');
+      div.className = 'mem-card' + (m.risk ? ' filled' : '');
+      div.id = 'mc-' + i;
+      div.innerHTML = `
+        <div class="mem-num">MEMBRE ${i+1}</div>
+        <input class="mem-input" placeholder="Prénom..." value="${m.name}" id="mi-${i}">
+        <span class="mem-risk-lbl">Tolérance à la perte :</span>
+        <div class="risk-mini" id="mr-${i}">
+          <div class="rm${m.risk==='prud'?' p':''}" id="rm-${i}-p">🛡️ Prudent</div>
+          <div class="rm${m.risk==='equi'?' e':''}" id="rm-${i}-e">⚖️ Équilibré</div>
+          <div class="rm${m.risk==='dyna'?' d':''}" id="rm-${i}-d">🚀 Dynamique</div>
+        </div>`;
+      grid.appendChild(div);
+
+      // name input listener
+      div.querySelector('#mi-'+i).addEventListener('input', e => {
+        S.members[i].name = e.target.value.trim();
+        this.updCard(i);
+      });
+
+      // risk buttons
+      ['p','e','d'].forEach(code => {
+        const riskMap = {p:'prud', e:'equi', d:'dyna'};
+        div.querySelector('#rm-'+i+'-'+code).addEventListener('click', () => {
+          S.members[i].risk = riskMap[code];
+          // reset all buttons for this member
+          ['p','e','d'].forEach(c => {
+            const btn = document.getElementById('rm-'+i+'-'+c);
+            if(btn) btn.className = 'rm';
+          });
+          const active = document.getElementById('rm-'+i+'-'+code);
+          if(active) active.className = 'rm '+code;
+          this.updCard(i);
+          ASIDE.render();
+        });
+      });
+    });
+  },
+
+  updCard(i) {
+    const c = document.getElementById('mc-'+i);
+    if (c) c.classList.toggle('filled', !!(S.members[i].name || S.members[i].risk));
+  },
+
+  validate() {
+    const missing = S.members.filter(m => !m.risk);
+    const errEl = document.getElementById('member-err');
+    if (missing.length > 0) {
+      errEl.innerHTML = `<div class="al warn"><div class="al-ico">⚠️</div><div><strong>${missing.length} membre(s) n'ont pas encore choisi leur profil.</strong> Tous doivent faire un choix.</div></div>`;
+      return;
+    }
+    errEl.innerHTML = '';
+    RISK.compute();
+    RISK.buildOverride();
+    NAV.advance(1);
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 1 — RISK
+═══════════════════════════════════════════════ */
+const RISK = {
+  compute() {
+    const total = S.members.length;
+    const counts = {prud:0, equi:0, dyna:0};
+    S.members.forEach(m => counts[m.risk]++);
+    const avg = S.members.reduce((s, m) => s + RS[m.risk], 0) / total;
+    let r = avg <= 1.5 ? 'prud' : avg <= 2.5 ? 'equi' : 'dyna';
+    if (counts.prud > 0 && counts.dyna < counts.prud && r === 'dyna') r = 'equi';
+    S.groupRisk = r;
+    S.computedRisk = r;
+    // set TRI defaults
+    const triMap = {prud:{pe:10,cl:6}, equi:{pe:12,cl:7}, dyna:{pe:15,cl:8}};
+    S.triPE = triMap[r].pe;
+    S.triCL = triMap[r].cl;
+    return {counts, total};
+  },
+
+  renderAgg() {
+    const {counts, total} = {counts:{prud:0,equi:0,dyna:0}, total:S.memberCount, ...(() => {const c={prud:0,equi:0,dyna:0}; S.members.forEach(m=>c[m.risk]++); return {counts:c};})()};
+    S.members.forEach(m => { if(m.risk) counts[m.risk]++; });
+    // Actually recompute cleanly
+    const cnt = {prud:0,equi:0,dyna:0};
+    S.members.forEach(m => { if(m.risk) cnt[m.risk]++; });
+    const tot = S.memberCount;
+
+    ['prud','equi','dyna'].forEach(r => {
+      const pct = Math.round(cnt[r]/tot*100);
+      document.getElementById('bar-'+r).style.width = pct+'%';
+      document.getElementById('pct-'+r).textContent = pct+'%';
+    });
+
+    const r = S.groupRisk;
+    const rv = document.getElementById('agg-res-val');
+    rv.textContent = RE[r]+' '+RL[r];
+    rv.style.color = r==='prud'?'#4ecca3':r==='equi'?'var(--goldb)':'#ff6b6b';
+    document.getElementById('agg-res-sub').textContent = RL2[r]+' · Rendement cible : '+RTRI[r];
+
+    // note
+    let note = '';
+    if (r==='prud') note = 'Majorité prudente. Accès limité aux PME — priorité aux placements stables.';
+    else if (r==='equi') note = 'Profil Équilibré. Permet d\'accéder aux PME dès que le capital le permet. Bon compromis.';
+    else note = 'Majorité dynamique. Rendement maximum visé — pertes possibles importantes.';
+    if (cnt.prud>0 && r==='equi') note = `${cnt.prud} membre(s) prudent(s) dans le groupe. Le profil Équilibré est retenu comme compromis.`;
+    document.getElementById('agg-note-txt').textContent = note;
+
+    // member summary
+    document.getElementById('p1-ms-grid').innerHTML = S.members.map(m =>
+      `<div class="ms-card ${m.risk}"><div class="ms-name">${m.name||'Membre'}</div><div class="ms-risk">${RE[m.risk]} ${RL[m.risk]}</div></div>`
+    ).join('');
+
+    // override msg
+    this.showRiskMsg();
+  },
+
+  buildOverride() {
+    const grid = document.getElementById('ro-grid');
+    grid.innerHTML = ['prud','equi','dyna'].map(r => `
+      <div class="ro ${r}${S.groupRisk===r?' sel':''}" id="ro-${r}">
+        <div class="ro-ico">${RE[r]}</div>
+        <div class="ro-name">${RL[r]}</div>
+        <div class="ro-loss">${RL2[r]}</div>
+        <div class="ro-tri">${RTRI[r]}</div>
+        ${S.computedRisk===r?'<div style="margin-top:5px"><span class="pill pg">Calculé</span></div>':''}
+      </div>`).join('');
+
+    ['prud','equi','dyna'].forEach(r => {
+      document.getElementById('ro-'+r).addEventListener('click', () => {
+        S.groupRisk = r;
+        document.querySelectorAll('.ro').forEach(e => e.classList.remove('sel'));
+        document.getElementById('ro-'+r).classList.add('sel');
+        // update TRI defaults for new risk
+        const triMap = {prud:{pe:10,cl:6}, equi:{pe:12,cl:7}, dyna:{pe:15,cl:8}};
+        S.triPE = triMap[r].pe;
+        S.triCL = triMap[r].cl;
+        this.showRiskMsg();
+        ASIDE.render();
+      });
+    });
+
+    document.getElementById('btn-to-classes').addEventListener('click', () => {
+      CLASSES.setDefaults();
+      NAV.advance(2);
+    });
+  },
+
+  showRiskMsg() {
+    const r = S.groupRisk;
+    const isOrig = r === S.computedRisk;
+    const cl = r==='prud'?'ok':r==='equi'?'info':'warn';
+    document.getElementById('risk-msg').innerHTML = `<div class="al ${cl}"><div class="al-ico">${RE[r]}</div><div>
+      <strong>Profil ${isOrig?'confirmé':'modifié'} : ${RL[r]}</strong><br>
+      ${RL2[r]} · Rendement visé : ${RTRI[r]}<br>
+      ${r==='prud'?'Priorité aux prêts et placements stables. PME déconseillées.':r==='equi'?'Accès aux PME quand le capital le permet. Bon équilibre.':'PME prioritaires. Rendement maximum visé.'}
+    </div></div>`;
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 2 — CLASSES
+═══════════════════════════════════════════════ */
+const CLASSES = {
+  setDefaults() {
+    const r = S.groupRisk;
+    S.selectedClasses = ALL_CLASSES.filter(c => c.rec[r]).map(c => c.id);
+  },
+
+  render() {
+    const r = S.groupRisk;
+    document.getElementById('cls-intro').textContent = `Voici les classes recommandées pour un profil ${RL[r]}. Vous pouvez modifier la sélection.`;
+    document.getElementById('cls-profile-txt').innerHTML = `Profil : <strong>${RE[r]} ${RL[r]}</strong>. ${
+      r==='prud'?'Les prêts PME et SCPI conviennent bien. Les PME non cotées sont déconseillées.':
+      r==='equi'?'PME + prêts = le mix idéal. Bonne diversification avec des rendements solides.':
+      'Les PME sont la classe principale. Les prêts assurent la liquidité en phase d\'accumulation.'}`;
+
+    document.getElementById('cls-list').innerHTML = ALL_CLASSES.map(c => {
+      const isRec = c.rec[r];
+      const warn = c.warnMsg[r] || '';
+      const isSel = S.selectedClasses.includes(c.id);
+      return `<div class="cls-item ${isRec?'rec':warn?'avoid':''}">
+        <div class="cls-toggle">
+          <div style="flex:1">
+            <div class="cls-item-title">${c.emoji} ${c.title} ${isRec?'<span class="pill pg">Recommandé</span>':''}</div>
+            <div class="cls-item-body">${c.body}</div>
+            <div class="cls-item-ex">${c.ex}</div>
+            ${warn?`<div class="al warn" style="margin-top:8px;padding:9px"><div class="al-ico" style="font-size:13px">⚠️</div><div style="font-size:12px">${warn}</div></div>`:''}
+            <div class="cls-badges">${c.badges.map(b=>`<span class="pill ${b.c}">${b.l}</span>`).join('')}</div>
+          </div>
+          <input type="checkbox" id="chk-${c.id}" ${isSel?'checked':''}>
+        </div>
+      </div>`;
+    }).join('');
+
+    // checkbox listeners
+    ALL_CLASSES.forEach(c => {
+      const chk = document.getElementById('chk-'+c.id);
+      if (chk) chk.addEventListener('change', e => {
+        if (e.target.checked) { if (!S.selectedClasses.includes(c.id)) S.selectedClasses.push(c.id); }
+        else S.selectedClasses = S.selectedClasses.filter(x => x !== c.id);
+        ASIDE.render();
+      });
+    });
+
+    // validate btn
+    const btn = document.getElementById('btn-to-tri');
+    // remove old listener by cloning
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    newBtn.addEventListener('click', () => {
+      if (S.selectedClasses.length === 0) { alert('Sélectionnez au moins une classe.'); return; }
+      TRI.setDefaults();
+      NAV.advance(3);
+    });
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 3 — TRI
+═══════════════════════════════════════════════ */
+const TRI = {
+  setDefaults() {
+    const r = S.groupRisk;
+    const map = {prud:{pe:10,cl:6,alloc:40}, equi:{pe:12,cl:7,alloc:65}, dyna:{pe:15,cl:8,alloc:75}};
+    S.triPE = map[r].pe; S.triCL = map[r].cl; S.allocPE = map[r].alloc;
+    this.computeBlended();
+  },
+
+  computeBlended() {
+    const pe = S.allocPE, cl = 100 - pe;
+    const hasPE = S.selectedClasses.includes('pe');
+    const hasCL = S.selectedClasses.includes('cl');
+    const rPE = hasPE ? 15 : 0;
+    const rCL = hasCL ? 8.5 : 0;
+    S.blended = parseFloat((pe/100*rPE + cl/100*rCL).toFixed(1));
+  },
+
+  render() {
+    const r = S.groupRisk;
+    const hasPE = S.selectedClasses.includes('pe');
+    const hasCL = S.selectedClasses.includes('cl');
+    const hasSCPI = S.selectedClasses.includes('scpi');
+    let html = '';
+
+    if (hasPE) html += `<div class="card">
+      <div class="card-tag">SEUIL — PME</div>
+      <div class="card-q">En dessous de quel rendement on refuse d'investir dans une PME ?</div>
+      <div class="slw">
+        <div class="slr"><span class="sll">Seuil minimum PME</span><span class="slv" id="tri-pe-v">${S.triPE}%/an</span></div>
+        <input type="range" id="tri-pe-sl" min="8" max="20" value="${S.triPE}" step="1">
+        <div class="slh"><span>8%</span><span>12%</span><span>16%</span><span>20%</span></div>
+      </div>
+      <div class="al info"><div class="al-ico">📊</div><div>Marché France Invest : PME non cotées = 12–18%/an. En dessous de 12%, bloquer 5–7 ans ne vaut pas le risque.</div></div>
+    </div>`;
+
+    if (hasCL) html += `<div class="card">
+      <div class="card-tag">SEUIL — PRÊTS PME</div>
+      <div class="card-q">En dessous de quel rendement on refuse de prêter ?</div>
+      <div class="slw">
+        <div class="slr"><span class="sll">Seuil minimum prêts</span><span class="slv" id="tri-cl-v">${S.triCL}%/an</span></div>
+        <input type="range" id="tri-cl-sl" min="4" max="12" value="${S.triCL}" step="0.5">
+        <div class="slh"><span>4%</span><span>6%</span><span>8%</span><span>10%</span><span>12%</span></div>
+      </div>
+      <div class="al info"><div class="al-ico">📊</div><div>Livret A = 3%. Un prêt PME doit rapporter au moins le double pour valoir le risque. Marché : 7–10%.</div></div>
+    </div>`;
+
+    document.getElementById('tri-sliders').innerHTML = html;
+
+    // listeners
+    const slPE = document.getElementById('tri-pe-sl');
+    if (slPE) slPE.addEventListener('input', e => {
+      S.triPE = parseFloat(e.target.value);
+      document.getElementById('tri-pe-v').textContent = e.target.value+'%/an';
+      document.getElementById('sb-pe').textContent = e.target.value+'%/an';
+    });
+    const slCL = document.getElementById('tri-cl-sl');
+    if (slCL) slCL.addEventListener('input', e => {
+      S.triCL = parseFloat(e.target.value);
+      document.getElementById('tri-cl-v').textContent = e.target.value+'%/an';
+      document.getElementById('sb-cl').textContent = e.target.value+'%/an';
+    });
+
+    // blend slider
+    const blendSl = document.getElementById('blend-slider');
+    const r2 = S.groupRisk;
+    blendSl.min = r2==='prud'?30:40;
+    blendSl.max = r2==='dyna'?85:75;
+    blendSl.value = S.allocPE;
+    if (!hasPE) { blendSl.disabled = true; S.allocPE = 0; }
+    else { blendSl.disabled = false; }
+
+    blendSl.oninput = e => { S.allocPE = parseInt(e.target.value); this.updDisplay(); };
+    this.updDisplay();
+  },
+
+  updDisplay() {
+    const pe = S.allocPE, cl = 100 - pe;
+    const hasPE = S.selectedClasses.includes('pe'), hasCL = S.selectedClasses.includes('cl');
+    const rPE = hasPE ? 15 : 0, rCL = hasCL ? 8.5 : 0;
+    const blend = parseFloat((pe/100*rPE + cl/100*rCL).toFixed(1));
+    S.blended = blend;
+
+    document.getElementById('d-pe').textContent = hasPE ? pe+'%' : '—';
+    document.getElementById('d-cl').textContent = hasCL ? cl+'%' : '—';
+    document.getElementById('d-blend').textContent = blend+'%/an';
+    document.getElementById('d-blend-lbl').textContent = `PME ${pe}% / Prêts ${cl}% :`;
+    document.getElementById('sb-blend').textContent = blend+'%/an';
+
+    const gain = Math.round(10000 * blend/100);
+    const val5 = Math.round(10000 * Math.pow(1+blend/100, 5));
+    document.getElementById('calc-gain').textContent = gain.toLocaleString('fr-FR')+' €';
+    document.getElementById('calc-5y').textContent = val5.toLocaleString('fr-FR')+' €';
+    document.getElementById('calc-f').innerHTML =
+      `<strong>Calcul :</strong> ${pe}% × ${rPE}% (PME)${hasCL?' + '+cl+'% × '+rCL+'% (prêts)':''} = <strong>${blend}%/an</strong>.<br>Sur 5 ans : 10 000 € × (1+${blend}%)⁵ ≈ <strong>${val5.toLocaleString('fr-FR')} €</strong>.`;
+
+    if (triChart) {
+      triChart.data.datasets[0].data = [(blend-1.5).toFixed(1), blend.toFixed(1), (blend+1.5).toFixed(1)];
+      triChart.update();
+    }
+  },
+
+  drawChart() {
+    const ctx = document.getElementById('c-tri'); if (!ctx) return;
+    if (triChart) triChart.destroy();
+    const b = S.blended;
+    triChart = new Chart(ctx, {
+      type:'bar',
+      data:{
+        labels:['Moins de PME','Répartition actuelle','Plus de PME'],
+        datasets:[{
+          label:'Rendement %/an',
+          data:[(b-1.5).toFixed(1), b.toFixed(1), (b+1.5).toFixed(1)],
+          backgroundColor:['rgba(20,18,32,.15)','rgba(212,160,23,.85)','rgba(45,106,79,.4)'],
+          borderColor:['var(--ink3)','var(--goldb)','var(--teal)'],
+          borderWidth:2, borderRadius:8
+        }]
+      },
+      options:{
+        responsive:true,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%/an'}}},
+        scales:{y:{beginAtZero:true,max:22,ticks:{callback:v=>v+'%'},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}
+      }
+    });
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 4 — CAPITAL
+═══════════════════════════════════════════════ */
+const CAP = {
+  compute() {
+    const n = S.memberCount;
+    const pperson = {A:50, B:100, C:150}[S.scenario];
+    const ini = S.capitalInit * n;
+    const men = pperson * n * S.moisAvant;
+    return {ini, men, total: ini+men, pperson, mthClub: pperson*n};
+  },
+
+  render() {
+    const n = S.memberCount;
+    // init slider
+    const initSl = document.getElementById('init-slider');
+    initSl.value = S.capitalInit;
+    initSl.oninput = e => { S.capitalInit = parseInt(e.target.value)||0; this.updDisplay(); };
+
+    // mois slider
+    const moisSl = document.getElementById('mois-slider');
+    moisSl.value = S.moisAvant;
+    moisSl.oninput = e => { S.moisAvant = parseInt(e.target.value)||1; this.updDisplay(); };
+
+    // scenario buttons
+    ['A','B','C'].forEach(sc => {
+      const btn = document.getElementById('sc-'+sc);
+      const pperson = {A:50,B:100,C:150}[sc];
+      document.getElementById('s'+sc+'-total').textContent = (pperson*n).toLocaleString('fr-FR')+' €/mois pour le club';
+      ['sA-pill','sB-pill','sC-pill'].forEach(id => {}); // already set in HTML
+      const newBtn = btn.cloneNode(true);
+      // preserve the inner content
+      btn.parentNode.replaceChild(newBtn, btn);
+      newBtn.addEventListener('click', () => {
+        S.scenario = sc;
+        document.querySelectorAll('#scen-opts .opt').forEach(o => o.classList.remove('sel'));
+        newBtn.classList.add('sel');
+        this.updDisplay();
+        if (capChart) this.drawChart();
+      });
+    });
+
+    // update totals display
+    const ppA = 50*n, ppB = 100*n, ppC = 150*n;
+    const elA = document.getElementById('sA-total');
+    const elB = document.getElementById('sB-total');
+    const elC = document.getElementById('sC-total');
+    if(elA) elA.textContent = ppA.toLocaleString('fr-FR')+' €/mois pour le club';
+    if(elB) elB.textContent = ppB.toLocaleString('fr-FR')+' €/mois pour le club';
+    if(elC) elC.textContent = ppC.toLocaleString('fr-FR')+' €/mois pour le club';
+
+    document.querySelectorAll('#scen-opts .opt').forEach(o => o.classList.remove('sel'));
+    const scBtn = document.getElementById('sc-'+S.scenario);
+    if(scBtn) scBtn.classList.add('sel');
+
+    this.updDisplay();
+  },
+
+  updDisplay() {
+    const {ini, men, total, pperson, mthClub} = this.compute();
+    const n = S.memberCount;
+
+    // init block
+    document.getElementById('init-lbl').textContent = S.capitalInit.toLocaleString('fr-FR')+' €';
+    document.getElementById('init-pp').textContent = S.capitalInit.toLocaleString('fr-FR')+' €';
+    document.getElementById('init-n').textContent = n;
+    document.getElementById('init-total').textContent = ini.toLocaleString('fr-FR')+' €';
+
+    // mois
+    document.getElementById('mois-lbl').textContent = S.moisAvant+' mois';
+
+    // dashboard
+    document.getElementById('res-init').textContent = ini.toLocaleString('fr-FR')+' €';
+    document.getElementById('res-cotis').textContent = men.toLocaleString('fr-FR')+' €';
+    document.getElementById('res-total').textContent = total.toLocaleString('fr-FR')+' €';
+
+    document.getElementById('res-formula').innerHTML =
+      `${n} × ${S.capitalInit.toLocaleString('fr-FR')} € (apport) = <strong>${ini.toLocaleString('fr-FR')} €</strong><br>`+
+      `+ ${n} × ${pperson} €/mois × ${S.moisAvant} mois = <strong>${men.toLocaleString('fr-FR')} €</strong><br>`+
+      `= <strong style="color:var(--goldb);font-size:15px">${total.toLocaleString('fr-FR')} €</strong>`;
+
+    const maxTicket = Math.floor(total * 0.20);
+    const hasPE = S.selectedClasses.includes('pe');
+    let verdict = '';
+    if (!hasPE) {
+      verdict = `<span style="color:#4ecca3">✅ Capital suffisant pour les prêts PME. Ticket max conseillé : <strong>${maxTicket.toLocaleString('fr-FR')} €</strong> (règle 20%).</span>`;
+    } else if (total < 5000) {
+      verdict = `<span style="color:#ff6b6b">⚠️ Capital insuffisant pour un premier deal PME (min 5 000 €). Il manque <strong>${(5000-total).toLocaleString('fr-FR')} €</strong>. Augmentez l'apport ou les mois de cotisation.</span>`;
+    } else if (maxTicket < 5000) {
+      verdict = `<span style="color:#EF9F27">⚠️ Capital de ${total.toLocaleString('fr-FR')} € mais la règle 20% limite le ticket à <strong>${maxTicket.toLocaleString('fr-FR')} €</strong> — insuffisant pour une PME (5 000 € min). Continuez à cotiser.</span>`;
+    } else {
+      verdict = `<span style="color:#4ecca3">✅ Capital prêt au mois <strong>${S.moisAvant}</strong> ! Ticket max autorisé : <strong>${maxTicket.toLocaleString('fr-FR')} €</strong> (règle 20%). Recommandé : <strong>${Math.min(maxTicket,7000).toLocaleString('fr-FR')} €</strong>.</span>`;
+    }
+    document.getElementById('res-verdict').innerHTML = verdict;
+
+    // projections
+    const c12 = ini + mthClub*12, c24 = ini + mthClub*24, c36 = ini + mthClub*36;
+    document.getElementById('cap12').textContent = c12.toLocaleString('fr-FR')+' €';
+    document.getElementById('cap24').textContent = c24.toLocaleString('fr-FR')+' €';
+    document.getElementById('cap36').textContent = c36.toLocaleString('fr-FR')+' €';
+
+    document.getElementById('pe-calc-f').innerHTML =
+      `<strong>Règle des 20% :</strong> On ne met jamais plus de 20% du capital sur un seul deal. Sur ${total.toLocaleString('fr-FR')} € → ticket max = <strong>${maxTicket.toLocaleString('fr-FR')} €</strong>.<br>`+
+      (hasPE && maxTicket >= 5000
+        ? `✅ Suffisant pour un deal PME (min 5 000 €).`
+        : `⚠️ Insuffisant pour un deal PME. Seuil : 25 000 € de capital total.`);
+
+    // ticket table
+    const hasCL = S.selectedClasses.includes('cl');
+    let rows = '';
+    if (hasCL) rows += `<tr><td><strong>Prêts PME</strong></td><td>200 €</td><td><strong>500–1 000 €</strong></td><td>1 500 €</td><td>2–5 ans</td></tr>`;
+    if (hasPE) rows += `<tr><td><strong>PME / Entreprises</strong></td><td>5 000 €</td><td><strong>${Math.min(maxTicket,7000).toLocaleString('fr-FR')} €</strong></td><td>${maxTicket.toLocaleString('fr-FR')} €</td><td>5–7 ans</td></tr>`;
+    document.getElementById('ticket-table').innerHTML =
+      `<table class="tbl"><thead><tr><th>Type</th><th>Min</th><th>Idéal</th><th>Max (règle 20%)</th><th>Durée</th></tr></thead><tbody>${rows}</tbody></table>`;
+
+    // sidebar
+    document.getElementById('sb-init').textContent = S.capitalInit.toLocaleString('fr-FR')+' €/membre';
+    document.getElementById('sb-cotis').textContent = pperson+' €/mois';
+    document.getElementById('sb-capital').textContent = total.toLocaleString('fr-FR')+' € (M'+S.moisAvant+')';
+
+    if (capChart) this.drawChart();
+  },
+
+  drawChart() {
+    const ctx = document.getElementById('c-cap'); if (!ctx) return;
+    if (capChart) capChart.destroy();
+    const n = S.memberCount;
+    const ini = S.capitalInit * n;
+    const months = [0,3,6,9,12,18,24,30,36];
+    const {total} = this.compute();
+
+    capChart = new Chart(ctx, {
+      type:'line',
+      data:{
+        labels: months.map(m=>'M'+m),
+        datasets:[
+          {label:'Scénario A (50€/mois)', data:months.map(m=>ini+n*50*m), borderColor:'rgba(185,28,28,.35)', borderWidth:1.5, borderDash:[4,4], pointRadius:2, fill:false, tension:.3},
+          {label:'Scénario B (100€/mois) ✓', data:months.map(m=>ini+n*100*m), borderColor:'#d4a017', borderWidth:2.5, pointRadius:4, fill:false, tension:.3},
+          {label:'Scénario C (150€/mois)', data:months.map(m=>ini+n*150*m), borderColor:'rgba(45,106,79,.5)', borderWidth:1.5, borderDash:[2,2], pointRadius:2, fill:false, tension:.3},
+          {label:'Capital 1er deal (mois '+S.moisAvant+')', data:months.map(()=>total), borderColor:'rgba(20,18,32,.3)', borderWidth:1.5, borderDash:[6,3], pointRadius:0, fill:false}
+        ]
+      },
+      options:{
+        responsive:true,
+        plugins:{
+          legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},
+          tooltip:{callbacks:{label:c=>c.dataset.label+' : '+Math.round(c.raw).toLocaleString('fr-FR')+' €'}}
+        },
+        scales:{
+          y:{beginAtZero:true, ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'k€':v+'€'}, grid:{color:'rgba(0,0,0,.04)'}},
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 5 — ALLOCATION
+═══════════════════════════════════════════════ */
+const ALLOC = {
+  render() {
+    const r = S.groupRisk;
+    const hasPE = S.selectedClasses.includes('pe'), hasCL = S.selectedClasses.includes('cl');
+    const {total} = CAP.compute();
+    const maxDeal = {prud:15, equi:20, dyna:25}[r];
+    const maxSector = {prud:25, equi:30, dyna:40}[r];
+
+    // alloc bars
+    let html = '';
+    if (hasPE) html += `<div style="margin:10px 0">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span><strong>PME / Entreprises</strong></span><span style="font-family:'Fraunces',serif;font-weight:700" id="pe-pct-lbl">${S.allocPE}%</span></div>
+      <div style="height:10px;background:var(--bg3);border-radius:5px;overflow:hidden"><div id="pe-bar" style="height:100%;width:${S.allocPE}%;background:var(--ink);border-radius:5px;transition:width .5s"></div></div>
+    </div>`;
+    if (hasCL) {
+      const cl = hasPE ? 100-S.allocPE : 100;
+      html += `<div style="margin:10px 0">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span><strong>Prêts PME</strong></span><span style="font-family:'Fraunces',serif;font-weight:700" id="cl-pct-lbl">${cl}%</span></div>
+        <div style="height:10px;background:var(--bg3);border-radius:5px;overflow:hidden"><div id="cl-bar" style="height:100%;width:${cl}%;background:var(--goldb);border-radius:5px;transition:width .5s"></div></div>
+      </div>`;
+    }
+    if (hasPE && hasCL) {
+      html += `<input type="range" id="alloc-sl" min="40" max="80" value="${S.allocPE}" step="5" style="width:100%;margin-top:10px">
+        <div class="slh"><span>PME 40%</span><span>PME 60%</span><span>PME 80%</span></div>`;
+    }
+    document.getElementById('alloc-bars').innerHTML = html;
+
+    const allocSl = document.getElementById('alloc-sl');
+    if (allocSl) allocSl.addEventListener('input', e => {
+      const pe = parseInt(e.target.value), cl = 100-pe;
+      S.allocPE = pe;
+      const lp = document.getElementById('pe-pct-lbl'), lc = document.getElementById('cl-pct-lbl');
+      const bp = document.getElementById('pe-bar'), bc = document.getElementById('cl-bar');
+      if(lp) lp.textContent=pe+'%'; if(lc) lc.textContent=cl+'%';
+      if(bp) bp.style.width=pe+'%'; if(bc) bc.style.width=cl+'%';
+    });
+
+    // rules table
+    document.getElementById('rules-table').innerHTML = `<table class="tbl">
+      <thead><tr><th>Règle</th><th>Limite — profil ${RL[r]}</th><th>Pourquoi ?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Max par investissement</strong></td><td><span class="pill pa">${maxDeal}% du capital</span></td><td>Si on perd tout sur un deal, le club survit</td></tr>
+        <tr><td><strong>Max par secteur</strong></td><td><span class="pill pa">${maxSector}% du capital</span></td><td>Si un secteur s'effondre, les autres tiennent</td></tr>
+        ${hasCL?'<tr><td><strong>Max par plateforme prêts</strong></td><td><span class="pill pa">40% de la poche prêts</span></td><td>Si une plateforme ferme, on ne perd pas tout</td></tr>':''}
+        <tr><td><strong>Réserve minimum</strong></td><td><span class="pill pg">10–15% du capital</span></td><td>Pour saisir une opportunité ou l\'imprévu</td></tr>
+        <tr><td><strong>Lignes actives min</strong></td><td><span class="pill pg">8 minimum</span></td><td>La diversification protège contre les mauvaises surprises</td></tr>
+      </tbody>
+    </table>`;
+
+    // alloc example
+    const maxDealE = Math.round(total*maxDeal/100), maxSectE = Math.round(total*maxSector/100);
+    document.getElementById('alloc-ex').innerHTML =
+      `<strong>Avec votre capital de ${total.toLocaleString('fr-FR')} € :</strong><br>`+
+      `— Max par deal PME = ${maxDeal}% × ${total.toLocaleString('fr-FR')} € = <strong>${maxDealE.toLocaleString('fr-FR')} €</strong><br>`+
+      `— Max par secteur = ${maxSector}% × ${total.toLocaleString('fr-FR')} € = <strong>${maxSectE.toLocaleString('fr-FR')} €</strong><br>`+
+      `— Réserve = 12% = <strong>${Math.round(total*.12).toLocaleString('fr-FR')} €</strong> toujours disponibles<br>`+
+      `— Capital investissable = <strong>${Math.round(total*.88).toLocaleString('fr-FR')} €</strong>`;
+
+    // vote table
+    const nm = S.memberCount, q5 = Math.ceil(nm*.6), q7 = Math.ceil(nm*.8);
+    document.getElementById('vote-tbl').innerHTML =
+      (hasCL?`<tr><td>Prêt 200–1 000 €</td><td>Lecture dossier plateforme</td><td>48h</td><td><strong>${q5}/${nm}</strong></td></tr>
+      <tr><td>Prêt 1 000–1 500 €</td><td>Note d'analyse secteur</td><td>72h</td><td><strong>${q5}/${nm}</strong></td></tr>`:'')
+      +(hasPE?`<tr><td>PME 5 000–7 000 €</td><td>Vérification complète (20–40h)</td><td>2–4 sem.</td><td><strong>${q7}/${nm}</strong></td></tr>
+      <tr><td>PME 7 000–10 000 €</td><td>Vérification renforcée</td><td>3–6 sem.</td><td><strong>${nm}/${nm}</strong></td></tr>`:'');
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 6 — KPI
+═══════════════════════════════════════════════ */
+const KPI = {
+  render() {
+    const r = S.groupRisk, n = S.memberCount;
+    document.getElementById('cotis-lbl').textContent = `Membres qui ont payé (sur ${n})`;
+    document.getElementById('ki-cotis').max = n;
+    document.getElementById('ki-cotis').value = Math.min(parseInt(document.getElementById('ki-cotis').value)||n, n);
+
+    const sectWarn = {prud:22, equi:27, dyna:35}[r], sectRed = {prud:25, equi:30, dyna:40}[r];
+    const kpis = [
+      {n:'Rendement réel du portefeuille', f:'Tous les 3 mois', w:'< 10%/an', red:'< 8% deux fois de suite'},
+      {n:'Multiplication de la mise (1,3x = 10 000€→13 000€)', f:'Tous les 3 mois', w:'< 1,2x', red:'< 1,0x (on perd)'},
+      {n:'Prêts non remboursés', f:'Chaque mois', w:'> 5%', red:'> 10%'},
+      {n:'Réserve disponible', f:'Chaque mois', w:'< 12%', red:'< 10%'},
+      {n:'Part d\'un secteur dans le portefeuille', f:'Tous les 3 mois', w:`> ${sectWarn}%`, red:`> ${sectRed}%`},
+      {n:'Part de l\'argent investi', f:'Tous les 3 mois', w:'< 60%', red:'< 40%'},
+      {n:'Investissements actifs', f:'Tous les 3 mois', w:'< 6', red:'< 4'},
+      {n:'Membres ayant payé leur cotisation', f:'Chaque mois', w:`< ${n}/${n}`, red:`≤ ${Math.floor(n*.78)}/${n}`}
+    ];
+    document.getElementById('kpi-tbl').innerHTML = kpis.map((k,i) =>
+      `<tr><td>${i+1}</td><td><strong>${k.n}</strong></td><td>${k.f}</td><td>${k.w}</td><td>${k.red}</td></tr>`
+    ).join('');
+
+    // listeners
+    ['ki-cotis','ki-treso','ki-defaut','ki-lignes'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) { const nel = el.cloneNode(true); el.parentNode.replaceChild(nel,el); nel.addEventListener('input', ()=>this.updBoard()); }
+    });
+    this.updBoard();
+  },
+
+  updBoard() {
+    const n = S.memberCount;
+    const cotis = parseInt(document.getElementById('ki-cotis').value)||0;
+    const treso = parseFloat(document.getElementById('ki-treso').value)||0;
+    const defaut = parseFloat(document.getElementById('ki-defaut').value)||0;
+    const lignes = parseInt(document.getElementById('ki-lignes').value)||0;
+    const fn = (v,ok,w,inv=true) => inv?(v>=ok?'tl':v>=w?'gd':'rd'):(v<=ok?'tl':v<=w?'gd':'rd');
+    const cm = {tl:'var(--teal2)', gd:'var(--amb)', rd:'var(--red)'};
+    const rows = [
+      {l:'Cotisations reçues', v:cotis+'/'+n, s:fn(cotis,n,Math.ceil(n*.89)), a:cotis>=n?'Parfait ✓':'Relancer '+(n-cotis)+' membre(s)'},
+      {l:'Réserve disponible', v:treso+'%', s:fn(treso,12,10), a:treso>=12?'OK ✓':'Geler les nouveaux deals'},
+      {l:'Prêts non remboursés', v:defaut+'%', s:fn(defaut,5,10,false), a:defaut<=5?'OK ✓':defaut<=10?'Geler nouveaux prêts':'Réunion d\'urgence'},
+      {l:'Investissements actifs', v:lignes, s:fn(lignes,8,6), a:lignes>=8?'OK ✓':'Ajouter '+(8-lignes)+' prêts rapidement'}
+    ];
+    document.getElementById('kpi-board').innerHTML = rows.map(r=>
+      `<div class="kb"><div class="kbl">${r.l}</div><div class="kbv" style="color:${cm[r.s]}">${r.v}</div>
+      <div class="kbs">${r.s==='tl'?'🟢 OK':r.s==='gd'?'🟡 Alerte':'🔴 Urgence'}</div><div class="kba">${r.a}</div></div>`
+    ).join('');
+    const reds = rows.filter(r=>r.s==='rd').length, warns = rows.filter(r=>r.s==='gd').length;
+    document.getElementById('kpi-concl').innerHTML = reds>0
+      ?`<div class="al bad"><div class="al-ico">🚨</div><div><strong>${reds} indicateur(s) en rouge.</strong> Réunion extraordinaire dans les 72h.</div></div>`
+      :warns>0?`<div class="al warn"><div class="al-ico">⚠️</div><div><strong>${warns} indicateur(s) à surveiller.</strong> À mentionner à la prochaine réunion.</div></div>`
+      :`<div class="al ok"><div class="al-ico">✅</div><div><strong>Tout est vert.</strong> Aucune action requise.</div></div>`;
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   STEP 7 — SYNTHESIS
+═══════════════════════════════════════════════ */
+const SYNTH = {
+  render() {
+    const r = S.groupRisk, n = S.memberCount;
+    const {total, pperson} = CAP.compute();
+    const maxTicket = Math.floor(total*.2);
+    const hasPE = S.selectedClasses.includes('pe'), hasCL = S.selectedClasses.includes('cl');
+    const clsNames = S.selectedClasses.map(id => { const c=ALL_CLASSES.find(x=>x.id===id); return c?c.emoji+' '+c.title.split(' ')[0]:''; }).join(', ');
+
+    document.getElementById('f-tri').textContent = S.blended.toFixed(1)+'%';
+    document.getElementById('f-tri-sub').textContent = `par an en moyenne · profil ${RL[r]}`;
+    document.getElementById('f-members').textContent = n+' membres';
+    document.getElementById('f-members-sub').textContent = S.members.map(m=>m.name||'Membre').join(', ');
+    document.getElementById('f-risk').textContent = RE[r]+' '+RL[r];
+    document.getElementById('f-risk-sub').textContent = RL2[r]+' · Cible : '+RTRI[r];
+    document.getElementById('f-classes').textContent = S.selectedClasses.length+' retenues';
+    document.getElementById('f-classes-sub').textContent = clsNames;
+    document.getElementById('f-capital').textContent = total.toLocaleString('fr-FR')+' €';
+    document.getElementById('f-capital-sub').textContent = pperson+' €/mois + '+S.capitalInit.toLocaleString('fr-FR')+' € apport · Ticket max '+maxTicket.toLocaleString('fr-FR')+' €';
+
+    document.getElementById('f-ms-grid').innerHTML = S.members.map(m =>
+      `<div class="ms-card ${m.risk}"><div class="ms-name">${m.name||'Membre'}</div><div class="ms-risk">${RE[m.risk]} ${RL[m.risk]}</div></div>`
+    ).join('');
+
+    const ini = S.capitalInit * n;
+    const iniStr = ini>0?`Capital apporté dès le jour 1 : ${ini.toLocaleString('fr-FR')} € (${n} × ${S.capitalInit.toLocaleString('fr-FR')} €). `:'';
+    let tl = `<div class="tli gd"><div class="tl-ph">JOUR 1</div><div class="tl-ev">Lancement du club</div><div class="tl-dt">${iniStr}${hasCL?'Premiers prêts PME disponibles si capital initial suffisant.':''}</div></div>`;
+    if(hasCL) tl+=`<div class="tli gd"><div class="tl-ph">MOIS 1 → ${S.moisAvant}</div><div class="tl-ev">Cotisations + prêts actifs</div><div class="tl-dt">${pperson} €/mois/membre. Capital qui grossit chaque mois.</div></div>`;
+    tl+=`<div class="tli tl_"><div class="tl-ph">MOIS ${S.moisAvant} — DATE CLÉ</div><div class="tl-ev">Capital : ${total.toLocaleString('fr-FR')} €</div><div class="tl-dt">${hasPE&&maxTicket>=5000?'✅ 1er deal PME. Ticket max : '+maxTicket.toLocaleString('fr-FR')+' €.':'⚠️ Continuer en crowdlending. Capital PME insuffisant.'}</div></div>`;
+    tl+=`<div class="tli tl_"><div class="tl-ph">ANNÉES 3 → 5</div><div class="tl-ev">Portefeuille en rythme de croisière</div><div class="tl-dt">8–12 lignes actives. Rendement ${S.blended.toFixed(1)}%/an. Profil ${RL[r]}.</div></div>`;
+    tl+=`<div class="tli dk"><div class="tl-ph">ANNÉE 5+</div><div class="tl-ev">Premières sorties et bilan</div><div class="tl-dt">On encaisse les plus-values et on réévalue collectivement la stratégie.</div></div>`;
+    document.getElementById('f-tl').innerHTML = tl;
+
+    const maxDeal = {prud:15, equi:20, dyna:25}[r];
+    const rejList = [
+      hasPE?`Rendement < ${S.triPE}%/an (PME)`:'',
+      hasCL?`Rendement < ${S.triCL}%/an (prêts)`:'',
+      `Montant > ${maxDeal}% du capital (> ${Math.floor(total*maxDeal/100).toLocaleString('fr-FR')} €)`,
+      'Secteur pétrolier, minier ou fossile',
+      'Entreprise hors de France',
+      'La réserve tomberait sous 10% après ce deal'
+    ].filter(Boolean);
+    document.getElementById('f-rejections').innerHTML = rejList.map(x =>
+      `<div class="al bad"><div class="al-ico">❌</div><div>${x}</div></div>`
+    ).join('');
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+S.step = 0;
+S.maxStep = 0;
+MEMBERS.init();
+ASIDE.render();
+</script>
+</body>
+</html>
